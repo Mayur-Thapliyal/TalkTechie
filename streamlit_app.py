@@ -16,14 +16,14 @@ with st.sidebar:
         "Adjust the temperature",
         0.1, 1.0, 0.7, 0.01,
     )
+    openai_api_key = st.text_input("API key",placeholder="OpenAi API key",type='password')
     system_prompt = st.text_area("Input your system prompt here",value=DEFAULT_SYSTEM_PROMPT,max_chars=2000)
 
-if not (system_prompt and model and temperature):
+if not (openai_api_key and system_prompt and model and temperature):
     assistant =  st.chat_message("assistant")
     assistant.write(ERROR_CONFIG_API_KEY)
 else:
     try:
-        openai_api_key = os.getenv('OPENAI_API_KEY', default=None)
         conversation = create_llm_memory_chain(openai_api_key,system_prompt,temperature,model)
         put_message_on_screen()
         if user_prompt := st.chat_input("Say something"):
